@@ -21,7 +21,11 @@
           }
         guesses.textContent = `${guesses.textContent} ${number_guess}`;
         
-        if(number_guess === correct_number) { //if win no need to recheck round
+        if (number_guess > 100 || number_guess < 1) {
+            alert("The range of the possible correct number is only between 1-100")
+            round_count--
+        }
+        else if(number_guess === correct_number) { //if win no need to recheck round
             last_result.textContent = "Congrats! Ya won!";
             last_result.style.backgroundColor = "lightgreen";
             low_or_high.textContent = "";
