@@ -34,3 +34,7 @@ body {
 h1 {
     font-weight: bold;
 }
+
+p {
+    line-height: 0.1rem;
+}
