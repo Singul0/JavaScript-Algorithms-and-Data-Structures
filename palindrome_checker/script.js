@@ -2,20 +2,28 @@ const palindrome_field = document.querySelector("#text-input")
 const submit_palindrome = document.querySelector("#check-btn")
 const is_a_palindrome_answer = document.querySelector("#result")
 
-submit_palindrome.addEventListener('click', guess_palindrome);
+submit_palindrome.addEventListener('click', () => {
+    guess_palindrome();
+    palindrome_field.value = '';
+});
 
 function guess_palindrome() {
+    if(palindrome_field.value === ``) {
+        alert("Please input a value");
+        return
+    }
+    
     let palindrome_text = String(palindrome_field.value);
     let palindrome_text_sanitary = palindrome_text.toLowerCase().replace(/[^0-9a-z]/gi, '');
 
-    reversed_text = reverse_string(palindrome_text_sanitary);
+    let reversed_text = reverse_string(palindrome_text_sanitary);
     console.log(`${palindrome_text_sanitary}, reversed is:${reversed_text}`)
 
-    if(palindrome_text_sanitary == reversed_text) {
-    is_a_palindrome_answer.textContent = `${palindrome_text} is a palindrome.`
+    if(palindrome_text_sanitary === reversed_text) {
+        is_a_palindrome_answer.textContent = `${palindrome_text} is a palindrome.`;
     }
     else {
-        is_a_palindrome_answer.textContent = `${palindrome_text} is not a palindrome.`
+        is_a_palindrome_answer.textContent = `${palindrome_text} is not a palindrome.`;
     }
 }
 
@@ -23,6 +31,6 @@ function guess_palindrome() {
 function reverse_string(string_to_reverse) {
     let string_array = string_to_reverse.split("");
     string_array.reverse();
-    reversed_string = string_array.join("");
+    let reversed_string = string_array.join("");
     return reversed_string;
 }
