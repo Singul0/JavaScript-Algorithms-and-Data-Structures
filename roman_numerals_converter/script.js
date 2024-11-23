@@ -52,7 +52,7 @@ function int_to_numerals(number_remaining) { //Hashmaps! :)
         checks if number_remaining is bigger than the arabic pair, if so. 
             adds roman numeral pair to the string_array and substract that arabic numeral pair number from number remaining
             loops continously until number_remaining is lower than 0.
-            I really need to be able to read hashmaps better... I can understand them just fine thankfully
+            I really need to be able to read hashmaps better... I can understand them just fine thankfully. just need to be able to read them
      */
     hashmap_roman_arab.forEach(function (array) {
         while (number_remaining >= array[1]) {
