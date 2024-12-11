@@ -1,63 +1,72 @@
-const number_field = document.querySelector("#number")
-const submit_int = document.querySelector("#convert-btn")
-const results = document.querySelector("#output")
+const cash_field = document.querySelector("#cash")
+const submit_int = document.querySelector("#purchase-btn")
+const customer_due = document.querySelector("#change-due")
+const cash_drawer = document.querySelector("#cash_drawer_display")
+const price_monitor = document.querySelector("#price_screen")
 
-let string_array = []; // array (should probably use an object for this, but whatever I don't have time)
+let price = 3 ;
+let cash;
+const denominations = [100, 20, 10, 5, 1, 0.25, 0.1, 0.05, 0.01]
+
+let cid = [
+  ['PENNY', 1.01],
+  ['NICKEL', 2.05],
+  ['DIME', 3.1],
+  ['QUARTER', 4.25],
+  ['ONE', 90],
+  ['FIVE', 55],
+  ['TEN', 20],
+  ['TWENTY', 60],
+  ['ONE HUNDRED', 100]
+];
+
+let cash_to_give_change = []
+
 
 submit_int.addEventListener('click', () => {
-    convert_roman_numerals();
-    number_field.value = '';
-    string_array = [];
+    sanitize_cash_input()
+    calculate_change();
+    refresh_display();
+    cash_field.value = '';
 });
 
-function convert_roman_numerals() {
-    let int_number = Number(number_field.value);
-    if(int_number === 0) { //non-valid numbers default to 0
-        results.textContent = "Please enter a valid number";
-        return
-    }
-    if(int_number < 0) {
-        results.textContent = "Please enter a number greater than or equal to 1";
-        return
-    }
-    if(int_number > 3999) {
-        results.textContent = "Please enter a number less than or equal to 3999";
-        return
-    }
-    
-    int_to_numerals(int_number);
-    results.textContent = string_array.join('');
-    
+function sanitize_cash_input () {
+  cash = Number(cash_field.value);
+  //TODO: ADD CHECKS FOR NOT ENOUGH CASH TO PAY/EXACT CHANGE IS 0
+  let cash_change = cash - price
+  let reversed_cid = cid.reverse(); //needs this so that I can sort from highest currency to give change to lowest
+  calculate_change(cash_change, reversed_cid);
 
 }
 
-function int_to_numerals(number_remaining) { //maps! :)
-    const map_roman_arab = [
-        ['M', 1000],
-        ['CM', 900],
-        ['D', 500],
-        ['CD', 400],
-        ['C', 100],
-        ['XC', 90],
-        ['L', 50],
-        ['XL', 40],
-        ['X', 10],
-        ['IX', 9],
-        ['V', 5],
-        ['IV', 4],
-        ['I', 1],
-    ];
+function calculate_change(cash_to_return, reversed_cash_in_drawer) { 
+  /*Function that goes through highest --> lowest denomination, 
+  uses greedy algorithm to figure out least amount of change needed
+  */
 
-    /*This loops through every roman, arabic numerals pair from highest to lowest, 
-        checks if number_remaining is bigger than the arabic pair, if so. 
-            adds roman numeral pair to the string_array and substract that arabic numeral pair number from number remaining
-            loops continously until number_remaining is lower than 0.
-            I really need to be able to read maps better... I can understand them just fine thankfully. just need to be able to read them
-     */
-    map_roman_arab.forEach(function (array) {
-        while (number_remaining >= array[1]) {
-            string_array.push(array[0]);
-            number_remaining -= array[1];
-        }
-    });
+
+  /*for loop on reversed_cid, inconjunction with denominations. 
+  gets the highest denomination to take out, 
+  remove the amount of denomination and add to cash to give */
+  for(let index_i in reversed_cash_in_drawer) {
+    if(denominations[index_i] <= cash_to_return) {
+      let cash_to_be_given_out = Math.floor((cash_to_return / denominations[index_i])) * denominations[index_i];
+      if(reversed_cash_in_drawer[index_i][1] < cash_to_be_given_out) {//if more cash is needed than we have in drawer, output all denominations in drawer.
+        cash_to_be_given_out = reversed_cash_in_drawer[index_i][1];
+      }
+      reversed_cash_in_drawer[index_i][1] -= cash_to_be_given_out;
+      cash_to_return -= cash_to_be_given_out;
+      cash_to_give_change.push([reversed_cash_in_drawer[index_i][0], cash_to_be_given_out]);
+      
+      //TODO: ADD CHECKS TO SEE IF THERE'S ENOUGH CASH IN DRAWER TO BE GIVEN OUT FOR
+      if(cash_to_return <= 0){
+        break
+      }
+    }
+  }
+
+}
+
+function refresh_display () {
+  
 }
