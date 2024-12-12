@@ -1,11 +1,13 @@
 const cash_field = document.querySelector("#cash")
 const submit_int = document.querySelector("#purchase-btn")
-const customer_due = document.querySelector("#change-due")
+const customer_due_display = document.querySelector("#change-due")
 const cash_drawer = document.querySelector("#cash_drawer_display")
 const price_monitor = document.querySelector("#price_screen")
 
-let price = 3 ;
+let price = 3.26;
 let cash;
+let checkout_status = "OPEN";
+
 const denominations = [100, 20, 10, 5, 1, 0.25, 0.1, 0.05, 0.01]
 
 let cid = [
@@ -24,17 +26,24 @@ let cash_to_give_change = []
 
 
 submit_int.addEventListener('click', () => {
-    sanitize_cash_input()
-    calculate_change();
-    refresh_display();
+    sanitize_cash_input();
     cash_field.value = '';
 });
 
 function sanitize_cash_input () {
+  //Clears previous change_due display
+  customer_due_display.innerHTML = null;
+
+  //Prepares for calculating change
   cash = Number(cash_field.value);
   //TODO: ADD CHECKS FOR NOT ENOUGH CASH TO PAY/EXACT CHANGE IS 0
-  let cash_change = cash - price
+  if(price > cash) {
+    alert("Customer does not have enough money to purchase the item")
+  }
+
+  let cash_change = cash - price;
   let reversed_cid = cid.reverse(); //needs this so that I can sort from highest currency to give change to lowest
+
   calculate_change(cash_change, reversed_cid);
 
 }
@@ -58,15 +67,26 @@ function calculate_change(cash_to_return, reversed_cash_in_drawer) {
       cash_to_return -= cash_to_be_given_out;
       cash_to_give_change.push([reversed_cash_in_drawer[index_i][0], cash_to_be_given_out]);
       
-      //TODO: ADD CHECKS TO SEE IF THERE'S ENOUGH CASH IN DRAWER TO BE GIVEN OUT FOR
       if(cash_to_return <= 0){
         break
       }
     }
   }
+  if(cash_to_return != 0) {
+    //TODO:error, not enough money in drawer to give change.
+  }
 
+  display_results(checkout_status, cash_to_give_change);
 }
 
-function refresh_display () {
-  
+function display_results (status, change_due) { //TODO: Learn more how below codeblock works (map() function)
+  customer_due_display.innerHTML = `<p>Status: ${status}</p>`;
+  let change_due_array = change_due.map(
+    ([denomination, amount]) => `<p>${denomination}: $${amount}</p>`
+  ).join('');
+  customer_due_display.innerHTML += change_due_array;
+
+  if(cash === price) {
+    customer_due_display.innerHTML = "No change due - customer paid with exact cash";
+  }
 }
