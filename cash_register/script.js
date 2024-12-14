@@ -22,19 +22,13 @@ let cid = [
   ['ONE HUNDRED', 100]
 ];
 
-let cash_to_give_change = []
-
-
 submit_int.addEventListener('click', () => {
   cash = Number(cash_field.value);
-  sanitize_cash_input();
   cash_field.value = '';
+  sanitize_cash_input();
 });
 
 function sanitize_cash_input () {
-  //Clears previous change_due display
-  customer_due_display.innerHTML = null;
-
   //Prepares for calculating change by removing decimals
   const cash_cents = Math.round(cash * 100);
   const price_cents = Math.round(price * 100);
@@ -42,9 +36,9 @@ function sanitize_cash_input () {
   //Reverses CID to go from highest --> lowest
   let reversed_cid = cid.reverse().map(([name, amount]) => [name, Math.round(amount * 100)]);
 
-  //TODO: ADD CHECKS FOR NOT ENOUGH CASH TO PAY/EXACT CHANGE IS 0
   if(price > cash) {
-    alert("Customer does not have enough money to purchase the item")
+    alert("Customer does not have enough money to purchase the item");
+    return;
   }
 
   let cash_change = cash_cents - price_cents;
@@ -56,18 +50,19 @@ function calculate_change(cash_to_return, reversed_cash_in_drawer) {
   /*Function that goes through highest --> lowest denomination, 
   uses greedy algorithm to figure out least amount of change needed
   */
-
+  let total_cid = 0;
+  let cash_to_give_change = []
+  
   /*for loop on reversed_cid, inconjunction with denominations. 
   gets the highest denomination to take out, 
   remove the amount of denomination and add to cash to give */
-  let total_cid = 0;
   for(let index_i in reversed_cash_in_drawer) {
     if(denominations[index_i] <= cash_to_return) {
       let cash_to_be_given_out = Math.floor((cash_to_return / denominations[index_i])) * denominations[index_i];
       if(reversed_cash_in_drawer[index_i][1] < cash_to_be_given_out) {//if more cash is needed than we have in drawer, output all denominations in drawer.
         cash_to_be_given_out = reversed_cash_in_drawer[index_i][1];
       }
-      if(cash_to_be_given_out != 0) {
+      if(cash_to_be_given_out != 0) { //change being denomination, 0 shouldn't be displayed.
         reversed_cash_in_drawer[index_i][1] -= cash_to_be_given_out;
         cash_to_return -= cash_to_be_given_out;
         cash_to_be_given_out /= 100 //returns to decimals after everything is mathed out
@@ -88,10 +83,17 @@ function calculate_change(cash_to_return, reversed_cash_in_drawer) {
   if(cash_to_return > 0) {
     checkout_status = "INSUFFICIENT_FUNDS";
   }
+
+  //updates cid with changed_reversed_cid, re-reversed again.
+  cid = reversed_cash_in_drawer.reverse();
+
   display_results(checkout_status, cash_to_give_change);
 }
 
 function display_results (status, change_due) { //TODO: Learn more how below codeblock works (map() function)
+  //Clears previous change_due display
+  customer_due_display.innerHTML = "";
+
   customer_due_display.innerHTML = `<p>Status: ${status}</p>`;
   if(status === "INSUFFICIENT_FUNDS") {
     return
@@ -106,7 +108,7 @@ function display_results (status, change_due) { //TODO: Learn more how below cod
   }
 }
 
-function quick_debug (item_price, c_cash, cash_in_drawer) {
+function quick_debug (item_price, c_cash, cash_in_drawer) { //Just a quick function to debug faster
   price = item_price;
   cash = c_cash;
   cid = cash_in_drawer;
