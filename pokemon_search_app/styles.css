@@ -1,0 +1,47 @@
+* {
+    text-align: center;
+    font-family:Verdana, Geneva, Tahoma, sans-serif
+}
+
+body {
+    background-color:#150a23;
+    width: 100%;
+    min-height: 100vh;
+    position: relative;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-direction: column;
+}
+
+.palindrome_container {
+    background-color:white;
+    margin: 30px;
+    max-width: 400px;
+    align-items: center;
+    flex-wrap: wrap;
+    padding: 1rem;
+    border-radius: 15px;
+}
+
+.align-left {
+    text-align: left;
+}
+
+.hint {
+    background-color: green;
+    border-radius: 15px;
+    color: white;
+    padding: 0.25rem 0.5rem;
+}
+h1 {
+    font-weight: bold;
+}
+
+p {
+    line-height: 0.1rem;
+}
+
+.inline {
+    display: inline;
+}

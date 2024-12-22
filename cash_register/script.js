@@ -96,7 +96,7 @@ function display_results (status, change_due) { //TODO: Learn more how below cod
 
   customer_due_display.innerHTML = `<p>Status: ${status}</p>`;
   if(status === "INSUFFICIENT_FUNDS") {
-    return
+    return;
   }
   let change_due_array = change_due.map(
     ([denomination, amount]) => `<p>${denomination}: $${amount}</p>`
