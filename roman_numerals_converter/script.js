@@ -1,6 +1,6 @@
-const number_field = document.querySelector("#number")
-const submit_int = document.querySelector("#convert-btn")
-const results = document.querySelector("#output")
+const number_field = document.querySelector("#number");
+const submit_int = document.querySelector("#convert-btn");
+const results = document.querySelector("#output");
 
 let string_array = []; // array (should probably use an object for this, but whatever I don't have time)
 
@@ -14,15 +14,15 @@ function convert_roman_numerals() {
     let int_number = Number(number_field.value);
     if(int_number === 0) { //non-valid numbers default to 0
         results.textContent = "Please enter a valid number";
-        return
+        return;
     }
     if(int_number < 0) {
         results.textContent = "Please enter a number greater than or equal to 1";
-        return
+        return;
     }
     if(int_number > 3999) {
         results.textContent = "Please enter a number less than or equal to 3999";
-        return
+        return;
     }
     
     int_to_numerals(int_number);

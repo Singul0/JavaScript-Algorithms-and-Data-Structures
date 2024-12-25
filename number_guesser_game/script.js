@@ -2,9 +2,9 @@
     let correct_number = Math.floor(Math.random() * (100)) + 1; //Selects a random number between 1-100
 
     //Pulls html elements into variables inside javascript:
-    const guesses = document.querySelector(".guesses")
-    const last_result = document.querySelector(".last_result")
-    const low_or_high = document.querySelector(".low_or_high")
+    const guesses = document.querySelector(".guesses");
+    const last_result = document.querySelector(".last_result");
+    const low_or_high = document.querySelector(".low_or_high");
     const guessed_number = document.querySelector("#guessed_number");
     const submit_guess = document.querySelector("#submit_guess");
     let round_count = 1;
@@ -22,8 +22,8 @@
         guesses.textContent = `${guesses.textContent} ${number_guess}`;
         
         if (number_guess > 100 || number_guess < 1) {
-            alert("The range of the possible correct number is only between 1-100")
-            round_count--
+            alert("The range of the possible correct number is only between 1-100");
+            round_count--;
         }
         else if(number_guess === correct_number) { //if win no need to recheck round
             last_result.textContent = "Congrats! Ya won!";
@@ -40,15 +40,15 @@
         }
         else {
             last_result.textContent = `Wrong, you have ${round_remaining} guesses remaining`;
-            console.log("wrong")
-                last_result.style.backgroundColor = "yellow";
+            console.log("wrong");
+            last_result.style.backgroundColor = "yellow";
                 if(number_guess > correct_number) {
                     low_or_high.textContent = "Your last guess was too high";
-                    console.log("too high")
+                    console.log("too high");
                 }
                 else if(number_guess < correct_number) {
                     low_or_high.textContent = "Your last guess was too low";
-                    console.log("too low")
+                    console.log("too low");
                 }
         }
 
